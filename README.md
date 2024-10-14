@@ -254,3 +254,39 @@ FROM Bookings
 GROUP BY DATEPART(month, Bookings.CheckIn)
 ORDER BY BookingCount DESC;
 ```
+## Phase 5: Database Optimization
+### Indexes for frequently queried columns
+```sql
+-- Room availability by Hotel
+CREATE INDEX idx_room_availability ON Rooms (HotelID, Available);
+
+-- Booking dates
+CREATE INDEX idx_booking_dates ON Bookings (BookedOn);
+```
+## Phase 6: Security Implementation
+### User roles and permissions
+- Admin: Full access to all data and ability to ammend
+- Hotel Manager: Can manage data only specific to their hotel
+- Receptionist: Manage guest check-in and check-out, guest information and view booking details
+- Staff member: View thier own staff data such as shifts, salary
+```sql
+CREATE ROLE Admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON Hotels TO Admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON Rooms TO Admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON Guests TO Admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON Bookings TO Admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON Staff TO Admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON Services TO Admin;
+
+CREATE ROLE HotelManager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON Rooms TO HotelManager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON Bookings TO HotelManager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON Staff TO HotelManager;
+
+CREATE ROLE Receptionist;
+GRANT SELECT, INSERT, UPDATE ON Guests TO Receptionist;
+GRANT SELECT, INSERT, UPDATE ON Bookings TO Receptionist;
+
+CREATE ROLE StaffMember;
+GRANT SELECT ON Staff TO StaffMember
+```
