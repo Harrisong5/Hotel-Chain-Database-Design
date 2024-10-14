@@ -135,3 +135,13 @@ CREATE TABLE Services (
     FOREIGN KEY (HotelID) REFERENCES Hotels(HotelID) ON DELETE CASCADE
 );
 ```
+## Phase 3: Data Insertion
+
+```
+INSERT INTO Hotels (HotelID, Name, Location, Rating, ContactInfo, AvailableRooms, ManagerStaffID, Amenities)
+VALUES 
+(1, 'Lake View Resort', 'Lake District, Windermere, United Kingdom', 4.6, '123-456-7890', 22, 1, 'Resturant, Spa, Gym, Conference Room, Golf Course'),
+(2, 'Royal Buddha', 'Luang Prabang, Laos', 4.1, '234-567-8910', 47, 42, 'Pool, Spa, Gym, Tennis Courts, Gardens'),
+(3, 'Techno Heaven', 'Berlin, Germany', 3.9, '345,678,9101', 60, 86, 'Spa, Gym, Resturant'),
+(4, 'Andean Valley', 'Temuco, Chile', 4.8, '456-789-1011', 18, 120, 'Plunge Pool, Spa, Gym, Resturant'),
+(5, 'Nature Retreat', 'Tholo, Lesotho', 4.9, '567-891-0112', 82, 155, 'Safari Platform, Pool, Spa, Resturant, Education Centre'),
