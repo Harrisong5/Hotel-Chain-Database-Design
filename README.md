@@ -57,66 +57,81 @@ Cost - price \
 Status – if currently available
 
 ## Phase 2: Database Schema Design
-```
-Table Hotels {
-  HotelID integer pk
-  Name varchar 
-  Location varchar
-  Rating numeric
-  ContactInfo varchar
-  AvailableRooms int
-  ManagerStaffID integer [ref: > Staff.StaffID] // one-to-one
-  Amenities varchar
-}
-
-Table Rooms {
-  RoomID integer pk
-  HotelID integer [ref: > Hotels.HotelID] // many-to-one
-  Type varchar
-  Amenities varchar
-  Price numeric
-  Available boolean
-  Capacity smallint
-}
-
-Table Guests {
-  GuestID integer pk
-  Name varchar
-  Email varchar
-  Phone integer
-  Prefernces text
-  MembershipStatus enum
-  History integer [ref: > Bookings.BookingID] // one-to-many
-}
-
-Table Bookings {
-  BookingID integer pk
-  GuestID integer [ref: > Guests.GuestID] // many-to-one
-  RoomID integer [ref: > Rooms.RoomID] // one-to-many
-  CheckIn datetime 
-  CheckOut datetime
-  BookedOn datetime
-  Costs text
-  PaymentStatus enum
-}
-
-Table Staff {
-  StaffID integer pk
-  Name varchar
-  HotelID integer [ref: > Hotels.HotelID] // many-to-one
-  Role varchar
-  Shifts varchar
-  Salary integer
-  Hired datetime
-}
-
-Table Services {
-  ServiceID integer pk
-  HotelID integer [ref: > Hotels.HotelID] // many-to-one
-  ServiceType varchar
-  Cost numeric
-  Status enum
-}
-```
 
 ![database schema](/images/databaseschema.png)
+
+### SQL code, ENUM variables have been changed to VARCHAR(50) as may not be native support in some SQL databases
+```sql
+-- Table: Hotels
+CREATE TABLE Hotels (
+    HotelID INTEGER PRIMARY KEY,
+    Name VARCHAR(255),
+    Location VARCHAR(255),
+    Rating NUMERIC,
+    ContactInfo VARCHAR(255),
+    AvailableRooms INT,
+    ManagerStaffID INTEGER UNIQUE,
+    Amenities VARCHAR(255),
+    FOREIGN KEY (ManagerStaffID) REFERENCES Staff(StaffID)
+);
+
+-- Table: Rooms
+CREATE TABLE Rooms (
+    RoomID INTEGER PRIMARY KEY,
+    HotelID INTEGER,
+    Type VARCHAR(100),
+    Amenities VARCHAR(255),
+    Price NUMERIC,
+    Available BOOLEAN,
+    Capacity SMALLINT,
+    FOREIGN KEY (HotelID) REFERENCES Hotels(HotelID) ON DELETE CASCADE
+);
+
+-- Table: Guests
+CREATE TABLE Guests (
+    GuestID INTEGER PRIMARY KEY,
+    Name VARCHAR(255),
+    Email VARCHAR(255),
+    Phone BIGINT,
+    Preferences TEXT,
+    MembershipStatus VARCHAR(50),
+    History INTEGER,
+    FOREIGN KEY (History) REFERENCES Bookings(BookingID) ON DELETE CASCADE
+);
+
+-- Table: Bookings
+CREATE TABLE Bookings (
+    BookingID INTEGER PRIMARY KEY,
+    GuestID INTEGER,
+    RoomID INTEGER,
+    CheckIn DATETIME,
+    CheckOut DATETIME,
+    BookedOn DATETIME,
+    Costs TEXT,
+    PaymentStatus VARCHAR(50),
+    FOREIGN KEY (GuestID) REFERENCES Guests(GuestID) ON DELETE CASCADE,
+    FOREIGN KEY (RoomID) REFERENCES Rooms(RoomID) ON DELETE CASCADE
+);
+
+-- Table: Staff
+CREATE TABLE Staff (
+    StaffID INTEGER PRIMARY KEY,
+    Name VARCHAR(255),
+    HotelID INTEGER,
+    Role VARCHAR(100),
+    Shifts VARCHAR(100),
+    Salary INTEGER,
+    Hired DATETIME,
+    FOREIGN KEY (HotelID) REFERENCES Hotels(HotelID) ON DELETE CASCADE
+);
+
+-- Table: Services
+CREATE TABLE Services (
+    ServiceID INTEGER PRIMARY KEY,
+    HotelID INTEGER,
+    ServiceType VARCHAR(100),
+    Cost NUMERIC,
+    Status VARCHAR(50),
+    FOREIGN KEY (HotelID) REFERENCES Hotels(HotelID) ON DELETE CASCADE
+);
+```
