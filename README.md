@@ -145,3 +145,19 @@ VALUES
 (3, 'Techno Heaven', 'Berlin, Germany', 3.9, '345,678,9101', 60, 86, 'Spa, Gym, Resturant'),
 (4, 'Andean Valley', 'Temuco, Chile', 4.8, '456-789-1011', 18, 120, 'Plunge Pool, Spa, Gym, Resturant'),
 (5, 'Nature Retreat', 'Tholo, Lesotho', 4.9, '567-891-0112', 82, 155, 'Safari Platform, Pool, Spa, Resturant, Education Centre'),
+
+INSERT INTO Rooms (RoomID, HotelID, Type, Amenities, Price, Available, Capacity)
+VALUES
+(1, 1, 'suite', 'TV', 861.24, true),
+(2, 2, 'penthouse', 'Coffee maker', 836.34, true),
+(3, 5, 'suite', 'Hair dryer', 795.75, true);
+-- First 3 of 100
+
+INSERT INTO Guests (GuestID, Name, Email, Phone, Preferences, MembershipStatus, History)
+VALUES
+'Hiro Yamamoto', 'ahandling0@google.es', '\+039 142 656 6871', 'service animal', 'suspended', '62, 94'),
+(2, 'John Smith', 'blauchlan1@google.co.uk', '\+373 064 371 7475', null, 'suspended', 'null'),
+(3, 'Maria Garcia', 'bmattaus2@sohu.com', '\+703 267 479 0053', 'nut allergy', 'active', '188');
+--First 3 of 200
+
+
