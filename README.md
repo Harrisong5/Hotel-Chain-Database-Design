@@ -271,12 +271,7 @@ CREATE INDEX idx_booking_dates ON Bookings (BookedOn);
 - Staff member: View thier own staff data such as shifts, salary
 ```sql
 CREATE ROLE Admin;
-GRANT SELECT, INSERT, UPDATE, DELETE ON Hotels TO Admin;
-GRANT SELECT, INSERT, UPDATE, DELETE ON Rooms TO Admin;
-GRANT SELECT, INSERT, UPDATE, DELETE ON Guests TO Admin;
-GRANT SELECT, INSERT, UPDATE, DELETE ON Bookings TO Admin;
-GRANT SELECT, INSERT, UPDATE, DELETE ON Staff TO Admin;
-GRANT SELECT, INSERT, UPDATE, DELETE ON Services TO Admin;
+GRANT ALL PRIVILEGES ON DATABASE HotelSystem TO Admin
 
 CREATE ROLE HotelManager;
 GRANT SELECT, INSERT, UPDATE, DELETE ON Rooms TO HotelManager;
@@ -289,4 +284,33 @@ GRANT SELECT, INSERT, UPDATE ON Bookings TO Receptionist;
 
 CREATE ROLE StaffMember;
 GRANT SELECT ON Staff TO StaffMember
+```
+### Encryption
+```sql
+CREATE SYMMETRIC KEY GuestDataKey
+WITH ALGORITHM = AES_256
+ENCRYPTION BY PASSWORD = 'examplepassword';
+
+CREATE CERTIFICATE CustomerDataCert
+WITH SUBJECT = 'Certificate for encrypting Customer data
+
+CREATE SYMMETRIC KEY CustomerSymmKey
+WITH ALGORITHM = AES_256
+ENCRYPTION BY CERTIFICATE CustomerDataCert
+
+UPDATE Guests
+SET Name = ENCRYPTIONBYKEY(KEY_GUID('CustomerSymmKey'), Name),
+    Email = ENCRYPTIONBYKEY(KEY_GUID('CustomerSymmKey'), Email),
+    Number = ENCRYPTIONBYKEY(KEY_GUID('CustomerSymmKey'), Number),
+    History = ENCRYPTIONBYKEY(KEY_GUID('CustomerSymmKey'), History);
+
+SELECT GuestID
+    CONVERT(VARCHAR, DECRYPTBYKEY(Email)) AS Name,
+    CONVERT(VARCHAR, DECRYPTBYKEY(Email)) AS Email,
+    CONVERT(VARCHAR, DECRYPTBYKEY(Phone)) AS Number,
+    CONVERT(VARCHAR, DECRYPTBYKEY(Phone)) AS History,
+FROM Guests;
+
+CLOSE SYMMETRIC KEY GuestDataKey;
+
 ```
