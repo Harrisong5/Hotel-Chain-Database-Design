@@ -114,7 +114,8 @@ Table Services {
   ServiceID integer pk
   HotelID integer [ref: > Hotels.HotelID] // many-to-one
   ServiceType varchar
-```
   Cost numeric
   Status enum
 }
+```
+
