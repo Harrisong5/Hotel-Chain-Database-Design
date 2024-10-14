@@ -160,4 +160,24 @@ VALUES
 (3, 'Maria Garcia', 'bmattaus2@sohu.com', '\+703 267 479 0053', 'nut allergy', 'active', '188');
 --First 3 of 200
 
+INSERT INTO Bookings (BookingID, GuestID, RoomID, CheckIn, CheckOut, BookedOn, Costs, PaymentStatus)
+VALUES
+(1, 42, '2|84|100', '2/20/2024', '1/12/2001', '4/14/2021', 'mini bar', 'paid'),
+(2, 145, '9|72|100', '11/24/2023', null, '8/24/2021', 'late check-out', 'late'),
+(3, 132, '5|96|100', '6/28/2024', '1/12/2001', '5/5/2021', 'spa services', null);
+--First 3 of 300
 
+INSERT INTO Staff (StaffID, Name, HotelID, Role, Shifts, Salary, Hired)
+VALUES
+(1, 'John Smith', 2, 'Hotel Manager', 'Monday-Friday 9am-5pm', 193785.44, '10/19/2023'),
+(2, 'Maria Garcia', 5, 'Housekeeper', 'Monday-Friday 9am-5pm', 149507.98, '9/28/2024'),
+(3, 'Hiro Yamamoto', 5, 'Housekeeper', 'Tuesday-Saturday 1pm-9pm', 127805.87, '2/26/2024');
+--First 3 of 50
+
+INSERT INTO Services (ServiceID, HotelID, ServiceType, Cost, Status)
+VALUES 
+(1, 2, 'Valet parking', 283.02, 'available'),
+(2, 3, 'Spa treatment', 415.33, 'available'),
+(3, 4, 'Room cleaning', 309.04, 'out of service'),
+(4, 1, 'Room service', 136.99, 'unavailable'),
+(5, 5, 'Valet parking', 353.08, 'available');
