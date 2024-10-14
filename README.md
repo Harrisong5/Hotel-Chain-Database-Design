@@ -119,4 +119,4 @@ Table Services {
 }
 ```
 
-![databse schema](images/database%schema%image.png)
+![database schema](images/database schema.png)
