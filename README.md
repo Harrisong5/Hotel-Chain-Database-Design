@@ -57,7 +57,7 @@ Cost - price
 Status – if currently available
 
 ## Phase 2: Database Schema Design
-
+```
 Table Hotels {
   HotelID integer pk
   Name varchar 
@@ -114,6 +114,7 @@ Table Services {
   ServiceID integer pk
   HotelID integer [ref: > Hotels.HotelID] // many-to-one
   ServiceType varchar
+```
   Cost numeric
   Status enum
 }
