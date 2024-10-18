@@ -1,5 +1,5 @@
 # Hotel-Chain-Database-Design
-Link to .md on Github: [Github MD](https://github.com/Harrisong5/Hotel-Chain-Database-Design/blob/main/README.md)
+Link to .md on Github: [Github MD](https://github.com/Harrisong5/Hotel-Chain-Database-Design/tree/main)
 
 ## Phase 1: Requirments Gathering and Data Mapping
 Designing data fields for a database
