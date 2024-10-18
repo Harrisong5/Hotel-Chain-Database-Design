@@ -1,7 +1,8 @@
 # Hotel-Chain-Database-Design
+Link to .md on Github: [Github MD](https://github.com/Harrisong5/Hotel-Chain-Database-Design/blob/main/README.md)
 
-## Phase 1: Requirments Gathering and Data Mapping]
-
+## Phase 1: Requirments Gathering and Data Mapping
+Designing data fields for a database
 ### Hotels
 HotelID PK – unique hotel ID \
 Name – specific hotel name \
@@ -136,7 +137,7 @@ CREATE TABLE Services (
 );
 ```
 ## Phase 3: Data Insertion
-
+SQL code for inserting sample data into database
 ```
 INSERT INTO Hotels (HotelID, Name, Location, Rating, ContactInfo, AvailableRooms, ManagerStaffID, Amenities)
 VALUES 
@@ -257,14 +258,41 @@ ORDER BY BookingCount DESC;
 ## Phase 5: Database Optimization
 ### Indexes for frequently queried columns
 ```sql
--- Room availability by Hotel
-CREATE INDEX idx_room_availability ON Rooms (HotelID, Available);
-
 -- Booking dates
-CREATE INDEX idx_booking_dates ON Bookings (BookedOn);
+CREATE INDEX idx_BookingDates ON Bookings (BookedOn);
+
+-- RoomID
+CREATE INDEX idx_RoomID ON Bookings (RoomID);
 ```
+###  Optimizing and Performance Report
+
+#### Using idx_BookingDates
+Query retrieves details from Guests table for stays in the last month
+```sql
+SELECT G.Name, G.Preferences 
+FROM Guests G
+JOIN Bookings B ON G.GuestID = B.GuestID
+WHERE B.CheckIn >= '2023-09-01' AND B.CheckOut <= '2023-09-30';
+```
+#### Using idx_RoomID and idx_BookingDates
+Query retrieves revenue based on Room Type
+```sql
+SELECT R.Type, SUM(CAST(B.Costs AS DECIMAL(10, 2))) AS TotalRevenue
+FROM Rooms R
+JOIN Bookings B ON R.RoomID = B.RoomID
+GROUP BY R.Type
+ORDER BY TotalRevenue DESC;
+```
+#### Performance report
+Table comparing pre- and post- optimization execution times in seconds 
+|Query|Pre|Post|
+|-----|---|----|
+|Guest table in last month|2.7s|0.8s|
+|Room Type revenues|3.6s|1.1s|
+
 ## Phase 6: Security Implementation
 ### User roles and permissions
+Setting roles limits the amount of information a staff member can access and can reduce risk of a breach.
 - Admin: Full access to all data and ability to ammend
 - Hotel Manager: Can manage data only specific to their hotel
 - Receptionist: Manage guest check-in and check-out, guest information and view booking details
@@ -286,6 +314,7 @@ CREATE ROLE StaffMember;
 GRANT SELECT ON Staff TO StaffMember
 ```
 ### Encryption
+Encrypting Guests personal information helps protect it from potential attackers and being used maliciously.
 ```sql
 CREATE SYMMETRIC KEY GuestDataKey
 WITH ALGORITHM = AES_256
@@ -313,4 +342,19 @@ FROM Guests;
 
 CLOSE SYMMETRIC KEY GuestDataKey;
 
+```
+### Parameterized query
+Data is supplied as parameters instead of executed as SQL commands to prevent injection which coudl enable an attackers to access and manipulate data.
+
+Guest details for GuestID of 1
+```sql
+DECLARE @GuestID INT;
+SET @GuestID = 1;
+
+EXEC sp_executesql
+    N'SELECT GuestID, Name, Email, Phone 
+      FROM Guests 
+      WHERE GuestID = @GuestID',
+    N'@GuestID INT',
+    @GuestID = @GuestID;
 ```
